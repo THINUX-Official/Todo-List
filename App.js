@@ -1,7 +1,19 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Task from './components/Task'
+import React, { useState } from 'react';
 
 export default function App() {
+
+    const [task, setTask] = useState();
+    const [taskItems, setTaskItems] = useState([]);
+
+    const handleAddTask = () => {
+        // Keyboard.dismiss();
+        console.log(task);
+        setTaskItems([...taskItems, task]);
+        setTask(null);
+    };
+
     return (
         <View style={styles.container}>
 
@@ -11,17 +23,37 @@ export default function App() {
 
                 <View style={styles.items}>
                     {/*    this is the where the tasks go*/}
-                    <Task text={'task 1'} />
-                    <Task text={'task 2'} />
+
+                    {taskItems.map((item, index) => {
+                        return (
+                            <Task key={index} text={item} />
+                        )
+                    }
+                    )}
                 </View>
             </View>
 
+            {/* write a task */}
+            <KeyboardAvoidingView
+                // behavior={Platform.OS === "android" ? "padding" : "height"}
+                behavior="height"
+                // behavior={Platform.OS === "android" ? "height" : "padding"} // Changed to prioritize Android
+                style={styles.writeTaskWrapper}>
+                <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={text => setTask(text)} />
+
+                <TouchableOpacity onPress={() => handleAddTask()}>
+                    <View style={styles.addWrapper}>
+                        <Text style={styles.addText}>+</Text>
+                    </View>
+                </TouchableOpacity>
+            </KeyboardAvoidingView>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        // fontFamily: 'Poppins',
         flex: 1,
         backgroundColor: '#E8EAED',
     },
@@ -35,5 +67,34 @@ const styles = StyleSheet.create({
     },
     items: {
         marginTop: 30,
+    },
+    writeTaskWrapper: {
+        position: 'absolute',
+        bottom: 5,
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+    },
+    input: {
+        paddingVertical: 15,
+        paddingHorizontal: 15,
+        backgroundColor: '#FFF',
+        borderRadius: 60,
+        borderColor: '#C0C0C0',
+        width: '80%',
+    },
+    addWrapper: {
+        width: 60,
+        height: 60,
+        backgroundColor: '#FFF',
+        borderRadius: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#C0C0C0',
+    },
+    addText: {
+        fontSize: 20,
+        color: '#C0C0C0',
     },
 });
