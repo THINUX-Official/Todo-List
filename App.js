@@ -33,7 +33,14 @@ export default function App() {
 
             {/* today's tasks */}
             <View style={styles.tasksWrapper}>
-                <Text style={styles.sectionTitle}>Today's Tasks</Text>
+                <View style={styles.topTitle}>
+                    <TouchableOpacity onPress={() => console.log('TASKS button pressed')}>
+                        <Text style={styles.sectionTitle}>TASKS</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => console.log('HISTORY button pressed')}>
+                        <Text style={styles.sectionTitle}>HISTORY</Text>
+                    </TouchableOpacity>
+                </View>
 
                 <ScrollView style={styles.items}>
                     {/*    this is the where the tasks go*/}
@@ -74,6 +81,13 @@ const styles = StyleSheet.create({
         paddingTop: 80,
         paddingHorizontal: 20
     },
+
+    topTitle: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+
     sectionTitle: {
         fontSize: 24,
         fontWeight: 'bold',
