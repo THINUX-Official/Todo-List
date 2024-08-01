@@ -1,6 +1,9 @@
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Task from './components/Task'
 import React, { useState } from 'react';
+import ToastManager, { Toast } from 'toastify-react-native'
+import { ScrollView } from 'react-native';
+
 
 export default function App() {
 
@@ -9,43 +12,45 @@ export default function App() {
 
     const handleAddTask = () => {
         // Keyboard.dismiss();
-        console.log(task);
         setTaskItems([...taskItems, task]);
         setTask(null);
+        showToasts();
     };
 
     const completeTask = (index) => {
         let itemsCopy = [...taskItems];
         itemsCopy.splice(index, 1);
         setTaskItems(itemsCopy);
-    }; 
+    };
 
+    const showToasts = () => {
+        Toast.success('Successfully saved!')
+    }
 
     return (
         <View style={styles.container}>
+            <ToastManager />
 
             {/* today's tasks */}
             <View style={styles.tasksWrapper}>
                 <Text style={styles.sectionTitle}>Today's Tasks</Text>
 
-                <View style={styles.items}>
+                <ScrollView style={styles.items}>
                     {/*    this is the where the tasks go*/}
 
                     {taskItems.map((item, index) => {
-                        return ( 
+                        return (
                             <TouchableOpacity key={index} onPress={() => completeTask(index)}>
                                 <Task text={item} />
                             </TouchableOpacity>
-                        )}
+                        )
+                    }
                     )}
-                </View>
+                </ScrollView>
             </View>
 
             {/* write a task */}
             <KeyboardAvoidingView
-                // behavior={Platform.OS === "android" ? "padding" : "height"}
-                behavior="height"
-                // behavior={Platform.OS === "android" ? "height" : "padding"} // Changed to prioritize Android
                 style={styles.writeTaskWrapper}>
                 <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={text => setTask(text)} />
 
@@ -77,8 +82,10 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     writeTaskWrapper: {
+        backgroundColor: '#fff',
         position: 'absolute',
-        bottom: 5,
+        bottom: 0,
+        // paddingHorizontal: 20,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
@@ -88,15 +95,16 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 15,
         backgroundColor: '#FFF',
-        borderRadius: 60,
+        borderRadius: 10,
         borderColor: '#C0C0C0',
         width: '80%',
+        borderColor: '#C0C0C0',
     },
     addWrapper: {
         width: 60,
         height: 60,
         backgroundColor: '#FFF',
-        borderRadius: 60,
+        borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
         borderColor: '#C0C0C0',
@@ -104,5 +112,5 @@ const styles = StyleSheet.create({
     addText: {
         fontSize: 20,
         color: '#C0C0C0',
-    },
+    }
 });
