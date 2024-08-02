@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 const HistoryContext = createContext();
 
@@ -9,8 +9,12 @@ export const HistoryProvider = ({ children }) => {
         setHistoryItems((prevItems) => [...prevItems, item]);
     };
 
+    const clearHistory = () => {
+        setHistoryItems([]);
+    };
+
     return (
-        <HistoryContext.Provider value={{ historyItems, addHistoryItem }}>
+        <HistoryContext.Provider value={{ historyItems, addHistoryItem, clearHistory }}>
             {children}
         </HistoryContext.Provider>
     );
