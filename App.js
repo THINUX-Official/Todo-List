@@ -1,15 +1,18 @@
-import {KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import Task from './components/Task'
 import React, {useState} from 'react';
-import ToastManager, {Toast} from 'toastify-react-native'
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import Task from './components/Task';
+import History from './screens/History';
+import ToastManager, {Toast} from 'toastify-react-native';
 
-export default function App() {
+const Stack = createStackNavigator();
 
+function HomeScreen({navigation}) {
     const [task, setTask] = useState();
     const [taskItems, setTaskItems] = useState([]);
 
     const handleAddTask = () => {
-        // Keyboard.dismiss();
         setTaskItems([...taskItems, task]);
         setTask(null);
         showToasts();
@@ -22,44 +25,30 @@ export default function App() {
     };
 
     const showToasts = () => {
-        Toast.success('Successfully saved!')
-    }
+        Toast.success('Successfully saved!');
+    };
 
     return (
         <View style={styles.container}>
             <ToastManager/>
 
-            {/* today's tasks */}
             <View style={styles.tasksWrapper}>
-                <View style={styles.topTitle}>
-                    <TouchableOpacity onPress={() => console.log('TASKS button pressed')}>
-                        <Text style={styles.sectionTitle}>TASKS</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => console.log('HISTORY button pressed')}>
-                        <Text style={styles.sectionTitle}>HISTORY</Text>
-                    </TouchableOpacity>
-                </View>
-
                 <ScrollView style={styles.items}>
-                    {/*    this is the where the tasks go*/}
-
-                    {taskItems.map((item, index) => {
-                            return (
-                                <TouchableOpacity key={index} onPress={() => completeTask(index)}>
-                                    <Task text={item}/>
-                                </TouchableOpacity>
-                            )
-                        }
-                    )}
+                    {taskItems.map((item, index) => (
+                        <TouchableOpacity key={index} onPress={() => completeTask(index)}>
+                            <Task text={item}/>
+                        </TouchableOpacity>
+                    ))}
                 </ScrollView>
             </View>
 
-            {/* write a task */}
-            <KeyboardAvoidingView
-                style={styles.writeTaskWrapper}>
-                <TextInput style={styles.input} placeholder={'Write a task'} value={task}
-                           onChangeText={text => setTask(text)}/>
-
+            <KeyboardAvoidingView style={styles.writeTaskWrapper}>
+                <TextInput
+                    style={styles.input}
+                    placeholder={'Write a task'}
+                    value={task}
+                    onChangeText={(text) => setTask(text)}
+                />
                 <TouchableOpacity onPress={() => handleAddTask()}>
                     <View style={styles.addWrapper}>
                         <Text style={styles.addText}>+</Text>
@@ -70,15 +59,47 @@ export default function App() {
     );
 }
 
+export default function App() {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Home"
+                    component={HomeScreen}
+                    options={({navigation}) => ({
+                        headerLeft: () => (
+                            <TouchableOpacity onPress={() => console.log('TASKS button pressed')}
+                                              style={styles.headerButton}>
+                                <Text style={styles.sectionTitle}>TASKS</Text>
+                            </TouchableOpacity>
+                        ),
+                        headerRight: () => (
+                            <TouchableOpacity onPress={() => navigation.navigate('History')}
+                                              style={styles.headerButton}>
+                                <Text style={styles.sectionTitle}>HISTORY</Text>
+                            </TouchableOpacity>
+                        ),
+                        headerTitle: '', // To remove default title and make space for left and right buttons
+                        headerStyle: {paddingHorizontal: 20} // Apply padding to header
+                    })}
+                />
+                <Stack.Screen name="History" component={History}/>
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
+
 const styles = StyleSheet.create({
     container: {
-        // fontFamily: 'Poppins',
         flex: 1,
         backgroundColor: '#E8EAED',
     },
+    headerButton: {
+        marginHorizontal: 20, // Horizontal margin for buttons
+    },
     tasksWrapper: {
-        paddingTop: 80,
-        paddingHorizontal: 20
+        // paddingTop: 80,
+        paddingHorizontal: 20,
     },
     topTitle: {
         flexDirection: 'row',
@@ -96,7 +117,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         position: 'absolute',
         bottom: 0,
-        // paddingHorizontal: 20,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
@@ -122,5 +142,5 @@ const styles = StyleSheet.create({
     addText: {
         fontSize: 20,
         color: '#C0C0C0',
-    }
+    },
 });
