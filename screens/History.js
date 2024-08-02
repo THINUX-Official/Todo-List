@@ -4,7 +4,7 @@ import Dialog from 'react-native-dialog';
 import { useHistory } from '../components/HistoryContext';
 
 export default function History() {
-    const { historyItems, clearHistory } = useHistory();
+    const { historyItems, clearHistory, removeItemFromHistory } = useHistory();
     const [dialogVisible, setDialogVisible] = useState(false);
 
     const handleClearHistory = () => {
@@ -20,14 +20,24 @@ export default function History() {
         setDialogVisible(false);
     };
 
+    const handleItemClick = (item) => {
+        // removeItemFromHistory(item); // Remove item from history
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView style={styles.historyList}>
                 {historyItems.length > 0 ? (
                     historyItems.map((item, index) => (
-                        <View key={index} style={styles.item}>
-                            <Text>{item}</Text>
-                        </View>
+                        <TouchableOpacity key={index} onPress={() => handleItemClick(item)}>
+                            <View style={styles.items}>
+                                <View style={styles.itemLeft}>
+                                    <View style={styles.square}></View>
+                                    <Text style={styles.itemText}>{item}</Text>
+                                </View>
+                                <View style={styles.circular}></View>
+                            </View>
+                        </TouchableOpacity>
                     ))
                 ) : (
                     <Text style={styles.emptyText}>No history items</Text>
@@ -59,10 +69,37 @@ const styles = StyleSheet.create({
     historyList: {
         flex: 1,
     },
-    item: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#C0C0C0',
+    items: {
+        backgroundColor: '#FFF',
+        padding: 15,
+        borderRadius: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+    },
+    itemLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+    },
+    square: {
+        width: 24,
+        height: 24,
+        backgroundColor: '#FF6F6F',
+        opacity: 0.4,
+        borderRadius: 5,
+        marginRight: 15,
+    },
+    itemText: {
+        maxWidth: '80%',
+    },
+    circular: {
+        width: 12,
+        height: 12,
+        borderColor: '#FF6F6F',
+        borderWidth: 2,
+        borderRadius: 5,
     },
     emptyText: {
         textAlign: 'center',
