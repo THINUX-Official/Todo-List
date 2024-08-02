@@ -1,10 +1,10 @@
-import {KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import Task from './components/Task'
-import React, {useState} from 'react';
-import ToastManager, {Toast} from 'toastify-react-native'
+import React, {useState} from "react";
+import {KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import Task from 'components/Task';
+import ToastManager, {Toast} from 'toastify-react-native';
 
-export default function App() {
 
+const Home = (props) => {
     const [task, setTask] = useState();
     const [taskItems, setTaskItems] = useState([]);
 
@@ -35,9 +35,11 @@ export default function App() {
                     <TouchableOpacity onPress={() => console.log('TASKS button pressed')}>
                         <Text style={styles.sectionTitle}>TASKS</Text>
                     </TouchableOpacity>
+                    {/*<Link href={'/History'}>*/}
                     <TouchableOpacity onPress={() => console.log('HISTORY button pressed')}>
                         <Text style={styles.sectionTitle}>HISTORY</Text>
                     </TouchableOpacity>
+                    {/*</Link>*/}
                 </View>
 
                 <ScrollView style={styles.items}>
@@ -80,11 +82,13 @@ const styles = StyleSheet.create({
         paddingTop: 80,
         paddingHorizontal: 20
     },
+
     topTitle: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+
     sectionTitle: {
         fontSize: 24,
         fontWeight: 'bold',
@@ -124,3 +128,5 @@ const styles = StyleSheet.create({
         color: '#C0C0C0',
     }
 });
+
+export default Home;

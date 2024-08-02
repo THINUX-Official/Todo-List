@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, TouchableOpacityBase, View } from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 
 const Task = (props) => {
     return (
