@@ -6,7 +6,8 @@ import Task from './components/Task';
 import History from './screens/History';
 import ToastManager, {Toast} from 'toastify-react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {HistoryProvider, useHistory} from './components/HistoryContext'; // Import HistoryContext
+import {HistoryProvider, useHistory} from './components/HistoryContext';
+import {MaterialIcons} from "@expo/vector-icons"; // Import HistoryContext
 
 const Stack = createStackNavigator();
 
@@ -16,15 +17,20 @@ function HomeScreen({navigation}) {
     const [taskItems, setTaskItems] = useState([]);
 
     const handleAddTask = () => {
+        if (task.trim().length === 0) {
+            Toast.error('Task cannot be Empty!');
+            return;
+        }
         setTaskItems([...taskItems, task]);
         setTask('');
-        Toast.success('Successfully saved!');
+        Toast.success('Successfully Added!');
     };
 
     const handleCompleteTask = (index) => {
         const completedTask = taskItems[index];
         setTaskItems((prevTasks) => prevTasks.filter((_, i) => i !== index));
         addHistoryItem(completedTask); // Add to history
+        Toast.success('Task Completed!'); // Show notification
     };
 
     return (
@@ -32,11 +38,15 @@ function HomeScreen({navigation}) {
             <ToastManager/>
             <View style={styles.tasksWrapper}>
                 <ScrollView style={styles.items}>
-                    {taskItems.map((item, index) => (
-                        <TouchableOpacity key={index} onPress={() => handleCompleteTask(index)}>
-                            <Task text={item}/>
-                        </TouchableOpacity>
-                    ))}
+                    {taskItems.length > 0 ? (
+                        taskItems.map((item, index) => (
+                            <TouchableOpacity key={index} onPress={() => handleCompleteTask(index)}>
+                                <Task text={item}/>
+                            </TouchableOpacity>
+                        ))
+                    ) : (
+                        <Text style={styles.emptyText}>No Task Assigned!</Text>
+                    )}
                 </ScrollView>
             </View>
             <KeyboardAvoidingView style={styles.writeTaskWrapper}>
@@ -74,7 +84,7 @@ export default function App() {
                             headerRight: () => (
                                 <TouchableOpacity onPress={() => navigation.navigate('History')}
                                                   style={styles.headerButton}>
-                                    <Text style={styles.sectionTitle}>HISTORY</Text>
+                                    <Text style={styles.sectionTitle}><MaterialIcons name="history" size={24} color="black" /></Text>
                                 </TouchableOpacity>
                             ),
                             headerTitle: '',
@@ -148,4 +158,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: '#C0C0C0',
     },
+    emptyText: {
+        textAlign: 'center',
+        marginTop: 20,
+        fontSize: 18,
+        color: '#C0C0C0',
+    }
 });

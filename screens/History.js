@@ -40,7 +40,7 @@ export default function History() {
                         </TouchableOpacity>
                     ))
                 ) : (
-                    <Text style={styles.emptyText}>No history items</Text>
+                    <Text style={styles.emptyText}>No History Items!</Text>
                 )}
             </ScrollView>
             <TouchableOpacity style={styles.clearButton} onPress={handleClearHistory}>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     square: {
         width: 24,
         height: 24,
-        backgroundColor: '#FF6F6F',
+        backgroundColor: '#FF6347',
         opacity: 0.4,
         borderRadius: 5,
         marginRight: 15,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     circular: {
         width: 12,
         height: 12,
-        borderColor: '#FF6F6F',
+        borderColor: '#FF6347',
         borderWidth: 2,
         borderRadius: 5,
     },
